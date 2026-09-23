@@ -1,0 +1,61 @@
+"""reportkit 的对外出口。老调用方只 import 这里。"""
+
+from .core import (
+    CHANNELS,
+    REPORT_VERSION,
+    ReportError,
+    aggregate_by_channel,
+    aggregate_legacy,
+    aggregate_orders,
+    apply_hooks,
+    bucket_list,
+    format_money,
+    line_total,
+    net_amount,
+    parse_float,
+    parse_int,
+    parse_line,
+    parse_rows,
+    render_report,
+    report_meta,
+    round_money,
+    round_money_half_up,
+    run_pipeline,
+    summarize_totals,
+    tax_amount,
+    validate_row,
+    write_report,
+)
+from . import legacy_api  # noqa: F401
+from . import plugins  # noqa: F401
+
+__version__ = "1.3.0"
+
+__all__ = [
+    "CHANNELS",
+    "REPORT_VERSION",
+    "ReportError",
+    "aggregate_by_channel",
+    "aggregate_legacy",
+    "aggregate_orders",
+    "apply_hooks",
+    "bucket_list",
+    "format_money",
+    "legacy_api",
+    "line_total",
+    "net_amount",
+    "parse_float",
+    "parse_int",
+    "parse_line",
+    "parse_rows",
+    "plugins",
+    "render_report",
+    "report_meta",
+    "round_money",
+    "round_money_half_up",
+    "run_pipeline",
+    "summarize_totals",
+    "tax_amount",
+    "validate_row",
+    "write_report",
+]
