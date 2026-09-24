@@ -1,45 +1,23 @@
-"""报表挂钩：注册和默认挂钩。
+"""兼容门面：挂钩实现搬到了 adapters/hooks.py，这里只做转发。
 
-这个模块和 core.py 是互相 import 的（历史原因，动的时候小心）。
-两边都只在函数体里用对面模块的东西，所以能跑起来；顺序一变就容易炸。
+老代码直接 import reportkit.plugins，还摸 _REGISTERED 这种私有名，都保持可用。
+_REGISTERED 与实现那边是同一个列表对象，原地修改两边都看得见。
 """
 
-_DEFAULT_HOOKS = ("flag_big_orders", "flag_empty_report")
+from .adapters.hooks import (
+    _DEFAULT_HOOKS,
+    _REGISTERED,
+    flag_big_orders,
+    flag_empty_report,
+    install_default_hooks,
+    register_hook,
+    registered_hooks,
+)
 
-_REGISTERED = []
-
-
-def flag_big_orders(rows, buckets):
-    """有千元以上的单子就给报表加一条提示。"""
-    for row in rows:
-        if row["qty"] * row["unit_price"] >= 1000:
-            return "contains an order of 1000.00 or more"
-    return None
-
-
-def flag_empty_report(rows, buckets):
-    """一行都没解析出来时给报表加一条提示。"""
-    if not rows:
-        return "no rows parsed"
-    return None
-
-
-def install_default_hooks():
-    """把默认挂钩交出去。core 在 import 的时候就调它，报表头里的 hooks= 就是这个数。"""
-    return [flag_big_orders, flag_empty_report]
-
-
-def register_hook(hook):
-    """老调用方插自己的挂钩，返回现在的挂钩总数。"""
-    if not callable(hook):
-        raise TypeError("hook must be callable")
-    _REGISTERED.append(hook)
-    from . import core
-
-    core._HOOKS.append(hook)
-    return len(core._HOOKS)
-
-
-def registered_hooks():
-    """已经注册过的挂钩（不含默认那两个）。"""
-    return list(_REGISTERED)
+__all__ = [
+    "flag_big_orders",
+    "flag_empty_report",
+    "install_default_hooks",
+    "register_hook",
+    "registered_hooks",
+]
